@@ -2,7 +2,7 @@
 
 nix flake that provides https://github.com/samm-git/aws-vpn-client/pull/16
 
-### Usage
+### Using the flake
 
 ```nix
 {
@@ -27,3 +27,9 @@ nix flake that provides https://github.com/samm-git/aws-vpn-client/pull/16
 ```
 
 You can find a slightly more sophisticated example in [my flake](https://github.com/ymatsiuk/nixos-config/blob/8dca28ee74bfe18b7bc1c55feb1d5df2ade6008f/flake.nix#L64)
+
+### Using the client
+
+```bash
+awsvpnclient start --config ~/path/to/config.ovpn
+```
