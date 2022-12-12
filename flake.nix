@@ -1,24 +1,18 @@
 {
   description = "AWS VPN client";
 
-  outputs = { self, nixpkgs }: {
+  inputs.flake-utils.url = "github:numtide/flake-utils";
 
-    packages.x86_64-linux = {
-      awsvpnclient = nixpkgs.legacyPackages.x86_64-linux.callPackage ./awsvpnclient.nix {
-        openvpn = nixpkgs.legacyPackages.x86_64-linux.callPackage ./openvpn.nix { };
-      };
-    };
-
-    defaultPackage.x86_64-linux = (import nixpkgs {
-      system = "x86_64-linux";
-      overlays = [ self.overlay ];
-    }).awsvpnclient;
-
-    overlay = final: prev: {
-      awsvpnclient = final.callPackage ./awsvpnclient.nix {
-        openvpn = final.callPackage ./openvpn.nix { };
-      };
-    };
-
-  };
+  outputs = { self, nixpkgs, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let pkgs = nixpkgs.legacyPackages.${system}; in
+      rec {
+        packages = flake-utils.lib.flattenTree {
+          awsvpnclient = pkgs.callPackage ./awsvpnclient.nix {
+            openvpn = pkgs.callPackage ./openvpn.nix { };
+          };
+        };
+        defaultPackage = packages.awsvpnclient;
+      }
+    );
 }
