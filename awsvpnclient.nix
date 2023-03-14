@@ -9,10 +9,10 @@
 
 buildGoModule rec {
   pname = "awsvpnclient";
-  version = "b9ea37937a3f4ca6a6442691886a108c49bab185";
+  version = "cae3a69821bd2ad78423ae585d212400531fdb8d";
 
   src = fetchFromGitHub {
-    owner = "ajm113";
+    owner = "ymatsiuk";
     repo = "aws-vpn-client";
     rev = "${version}";
     sha256 = "sha256-vJRQnTzJuhpYxG8YhH+QcZoRwvuuUzFOpunNo9mrfwI=";
