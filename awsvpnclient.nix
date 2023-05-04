@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , makeWrapper
 , openvpn
-, sudo
 , xdg-utils
 }:
 
@@ -27,11 +26,11 @@ buildGoModule rec {
 
     substituteInPlace $out/awsvpnclient.yml \
       --replace /home/myname/aws-vpn-client/openvpn "openvpn" \
-      --replace /usr/bin/sudo "/run/wrappers/bin/sudo"
+      --replace /usr/bin/sudo "sudo"
 
     makeWrapper $out/bin/aws-vpn-client $out/bin/awsvpnclient \
       --run "cd $out" \
-      --prefix PATH : "${lib.makeBinPath [ openvpn xdg-utils sudo ]}"
+      --prefix PATH : "${lib.makeBinPath [ openvpn xdg-utils ]}"
   '';
 
 }
