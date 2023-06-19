@@ -6,27 +6,25 @@ nix flake that provides https://github.com/samm-git/aws-vpn-client/pull/16
 
 ```nix
 {
-  inputs = {
-    awsvpnclient.url = "github:ymatsiuk/awsvpnclient";
-  };
-
-  outputs = {self, nixpkgs, awsvpnclient }:
-  {
-    nixosConfigurations.nixps = nixpkgs.lib.nixosSystem {
-      # ...
-      modules = [
-        {
-          nix.extraOptions = "experimental-features = nix-command flakes";
-          nix.package = pkgs.nixUnstable;
-          nixpkgs.overlays = [ awsvpnclient.overlay ];
-        }
+  inputs.awsvpnclient.url = "github:ymatsiuk/awsvpnclient";
+  outputs = { self, nixpkgs, awsvpnclient }:
+    let
+      system = "x86_64-linux";
+    in
+    {
+      nixosConfigurations.nixps = nixpkgs.lib.nixosSystem {
+        # ...
+        modules = [{ environment.systemPackages = [ awsvpnclient ]; }];
+        # ...
+      };
+      overlays = [
+        (final: prev: {
+          awsvpnclient = awsvpnclient.packages.${system}.awsvpnclient;
+        })
       ];
     };
- };
 }
 ```
-
-You can find a slightly more sophisticated example in [my flake](https://github.com/ymatsiuk/nixos-config/blob/8dca28ee74bfe18b7bc1c55feb1d5df2ade6008f/flake.nix#L64)
 
 ### Using the client
 
